@@ -1,0 +1,18 @@
+package com.kanda.labs.design.tokens
+
+import androidx.compose.ui.graphics.Color
+
+public object AppColor {
+    public val m50: Color = Color(0xFFFAF8FF)
+    public val m100: Color = Color(0xFFF3EDFF)
+    public val m200: Color = Color(0xFFE8DEFF)
+    public val m300: Color = Color(0xFFD2BFFF)
+    public val m400: Color = Color(0xFFB696FF)
+    public val m500: Color = Color(0xFF8C5CFF)
+    public val m600: Color = Color(0xFF7145D6)
+    public val m700: Color = Color(0xFF5B39A8)
+    public val m800: Color = Color(0xFF44307A)
+
+    public val n50: Color = Color(0xFFF7F7FC)
+    public val n100: Color = Color(0xFFF2F2FA)
+}

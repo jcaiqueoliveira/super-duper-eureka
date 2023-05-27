@@ -1,0 +1,16 @@
+PODS:
+  - iosAppKMP (1.0.0)
+
+DEPENDENCIES:
+  - iosAppKMP (from `../iosAppKMP`)
+
+EXTERNAL SOURCES:
+  iosAppKMP:
+    :path: "../iosAppKMP"
+
+SPEC CHECKSUMS:
+  iosAppKMP: d2f041a8c2a232d00ce8785ae3b856f99802aada
+
+PODFILE CHECKSUM: 4cd3cfd07b5490df1410d8b3e987f45b94184a5f
+
+COCOAPODS: 1.12.1

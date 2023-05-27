@@ -9,6 +9,8 @@ public data class AppColorTokens(
     public val backgroundInversePrimary: Color,
     public val contentPrimary: Color,
     public val contentInversePrimary: Color,
+    public val contentSecondary: Color,
+    public val border: Color,
     val isLight: Boolean,
 )
 
@@ -17,6 +19,8 @@ public val darkTokens: AppColorTokens = AppColorTokens(
     backgroundInversePrimary = AppColor.n50,
     contentPrimary = AppColor.n50,
     contentInversePrimary = AppColor.m800,
+    border = AppColor.n200,
+    contentSecondary = AppColor.n50,
     isLight = false
 )
 public val lightTokens: AppColorTokens = AppColorTokens(
@@ -24,5 +28,7 @@ public val lightTokens: AppColorTokens = AppColorTokens(
     backgroundInversePrimary = AppColor.m600,
     contentPrimary = AppColor.m600,
     contentInversePrimary = AppColor.n50,
+    border = AppColor.n200,
+    contentSecondary = AppColor.m900,
     isLight = true
 )

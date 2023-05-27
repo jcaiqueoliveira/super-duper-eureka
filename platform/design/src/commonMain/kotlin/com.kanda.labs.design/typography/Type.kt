@@ -61,6 +61,10 @@ public class AppTypography private constructor(
                 default.copy(fontSize = 20.sp, lineHeight = 28.sp)
             )
 
+            public val h7: AppTypography = AppTypography(
+                default.copy(fontSize = 16.sp, lineHeight = 18.sp)
+            )
+
             public val values: List<AppTypography> = listOf(h1, h2, h3, h4, h5, h6)
         }
     }

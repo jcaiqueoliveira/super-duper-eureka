@@ -12,7 +12,10 @@ public object AppColor {
     public val m600: Color = Color(0xFF7145D6)
     public val m700: Color = Color(0xFF5B39A8)
     public val m800: Color = Color(0xFF44307A)
+    public val m900: Color = Color(0xFF2C2643)
 
     public val n50: Color = Color(0xFFF7F7FC)
     public val n100: Color = Color(0xFFF2F2FA)
+    public val n200: Color = Color(0xFFE4E4F7)
+    public val n900: Color = Color(0xFF1A1A38)
 }

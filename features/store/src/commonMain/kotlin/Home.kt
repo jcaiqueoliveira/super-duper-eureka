@@ -9,10 +9,11 @@ import androidx.compose.ui.unit.dp
 import com.kanda.labs.design.AppTheme
 import com.kanda.labs.design.component.Card
 import com.kanda.labs.design.component.Text
+import com.kanda.labs.design.icons.rememberCoffee
+import com.kanda.labs.design.icons.rememberConfirmationNumber
+import com.kanda.labs.design.icons.rememberFilterVintage
 import com.kanda.labs.design.tokens.Spacers
 import com.kanda.labs.design.typography.AppTypography
-import compose.icons.FeatherIcons
-import compose.icons.feathericons.Upload
 
 @Composable
 public fun HomeStore() {
@@ -27,21 +28,21 @@ public fun HomeStore() {
         Row {
             Card(
                 modifier = Modifier.weight(1f).padding(end = 4.dp),
-                icon = FeatherIcons.Upload,
+                icon = rememberFilterVintage(),
                 title = "Cabify T-Shirt",
                 supportText = "$42,00"
             )
 
             Card(
                 modifier = Modifier.weight(1f).padding(start = 4.dp),
-                icon = FeatherIcons.Upload,
+                icon = rememberCoffee(),
                 title = "Cabify Coffee Mug",
                 supportText = "$42,00"
             )
         }
         Card(
             modifier = Modifier.fillMaxWidth(0.5f).padding(end = 4.dp, top = 8.dp),
-            icon = FeatherIcons.Upload,
+            icon = rememberConfirmationNumber(),
             title = "Cabify Voucher",
             supportText = "$42,00"
         )

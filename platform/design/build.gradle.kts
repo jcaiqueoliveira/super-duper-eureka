@@ -43,7 +43,4 @@ android {
     sourceSets["main"].apply {
         res.srcDirs("src/androidMain/resources")
     }
-    packagingOptions {
-        resources.excludes.add("META-INF/**")
-    }
 }

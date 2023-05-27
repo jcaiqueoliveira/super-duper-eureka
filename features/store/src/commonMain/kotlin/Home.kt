@@ -30,7 +30,8 @@ public fun HomeStore() {
                 modifier = Modifier.weight(1f).padding(end = 4.dp),
                 icon = rememberFilterVintage(),
                 title = "Cabify T-Shirt",
-                supportText = "$42,00"
+                supportText = "$42,00",
+                count = 2
             )
 
             Card(

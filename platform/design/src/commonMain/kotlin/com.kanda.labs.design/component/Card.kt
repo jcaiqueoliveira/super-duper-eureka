@@ -1,8 +1,10 @@
 package com.kanda.labs.design.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,7 +36,7 @@ public fun Card(
     icon: ImageVector,
     title: String,
     supportText: String,
-    badge: String? = null,
+    count: Int = 0,
     primaryClick: (() -> Unit)? = null,
     secondaryClick: (() -> Unit)? = null
 ) {
@@ -43,25 +46,48 @@ public fun Card(
             .clip(AppRoundedCorner.large)
             .border(
                 border = BorderStroke(
-                    width = 1.5.dp,
-                    color = AppTheme.colors.border
+                    width = 1.5.dp, color = AppTheme.colors.border
                 ),
                 shape = AppRoundedCorner.large
             )
             .background(AppTheme.colors.backgroundPrimary)
             .padding(Spacers.small),
     ) {
+        AnimatedVisibility(count > 0, modifier = Modifier.align(Alignment.TopEnd)) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
+                    .background(AppTheme.colors.backgroundInversePrimary)
+                    .align(Alignment.TopEnd)
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = count.toString(),
+                    typography = AppTypography.Text.small,
+                    textAlign = TextAlign.Center,
+                    contentColor = AppTheme.colors.contentInversePrimary
+                )
+            }
+        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                modifier = Modifier.padding(top = Spacers.small).size(36.dp),
+                modifier = Modifier
+                    .padding(top = Spacers.small)
+                    .size(56.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+                    .padding(8.dp),
                 imageVector = icon,
                 contentDescription = null,
                 tint = AppTheme.colors.backgroundInversePrimary
             )
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = Spacers.medium),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Spacers.medium),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -82,7 +108,9 @@ public fun Card(
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = Spacers.medium),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Spacers.medium),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -92,19 +120,24 @@ public fun Card(
                         .padding(4.dp)
                         .clip(CircleShape)
                         .background(AppTheme.colors.border)
-                        .padding(Spacers.xSmall),
+                        .padding(Spacers.xSmall)
+                        .then(
+                            if (secondaryClick != null) Modifier.clickable { secondaryClick() } else Modifier
+                        ),
                     imageVector = rememberRemove(),
                     tint = AppTheme.colors.backgroundInversePrimary,
                     contentDescription = null
                 )
-                //  Spacer(modifier = Modifier.padding(4.dp))
                 Icon(
                     modifier = Modifier
                         .size(48.dp)
                         .padding(4.dp)
                         .clip(CircleShape)
                         .background(AppTheme.colors.backgroundInversePrimary)
-                        .padding(Spacers.xSmall),
+                        .padding(Spacers.xSmall)
+                        .then(
+                            if (primaryClick != null) Modifier.clickable { primaryClick() } else Modifier
+                        ),
                     imageVector = rememberAdd(),
                     tint = AppColor.n50,
                     contentDescription = null

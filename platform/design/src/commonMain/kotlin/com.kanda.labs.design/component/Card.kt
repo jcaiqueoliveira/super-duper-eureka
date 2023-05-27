@@ -50,7 +50,7 @@ public fun Card(
                 ),
                 shape = AppRoundedCorner.large
             )
-            .background(AppTheme.colors.backgroundPrimary)
+            .background(AppTheme.colors.contentInversePrimary)
             .padding(Spacers.small),
     ) {
         AnimatedVisibility(count > 0, modifier = Modifier.align(Alignment.TopEnd)) {
@@ -82,7 +82,7 @@ public fun Card(
                     .padding(8.dp),
                 imageVector = icon,
                 contentDescription = null,
-                tint = AppTheme.colors.backgroundInversePrimary
+                tint = if(AppTheme.colors.isLight) AppTheme.colors.backgroundInversePrimary else AppTheme.colors.backgroundPrimary
             )
             Row(
                 modifier = Modifier
@@ -125,7 +125,7 @@ public fun Card(
                             if (secondaryClick != null) Modifier.clickable { secondaryClick() } else Modifier
                         ),
                     imageVector = rememberRemove(),
-                    tint = AppTheme.colors.backgroundInversePrimary,
+                    tint = if(AppTheme.colors.isLight) AppTheme.colors.backgroundInversePrimary else AppTheme.colors.contentInversePrimary,
                     contentDescription = null
                 )
                 Icon(
@@ -139,7 +139,7 @@ public fun Card(
                             if (primaryClick != null) Modifier.clickable { primaryClick() } else Modifier
                         ),
                     imageVector = rememberAdd(),
-                    tint = AppColor.n50,
+                    tint = AppTheme.colors.contentInversePrimary,
                     contentDescription = null
                 )
             }

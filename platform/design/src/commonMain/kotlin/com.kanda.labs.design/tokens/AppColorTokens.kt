@@ -15,10 +15,10 @@ public data class AppColorTokens(
 )
 
 public val darkTokens: AppColorTokens = AppColorTokens(
-    backgroundPrimary = AppColor.m800,
+    backgroundPrimary = AppColor.n900,
     backgroundInversePrimary = AppColor.n50,
     contentPrimary = AppColor.n50,
-    contentInversePrimary = AppColor.m800,
+    contentInversePrimary = AppColor.n850,
     border = AppColor.n200,
     contentSecondary = AppColor.n50,
     isLight = false

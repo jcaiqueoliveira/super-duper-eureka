@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-internal class Store(private val repository: StoreRepository = StoreRepository()) {
+internal class StorePresenter(private val repository: StoreRepository = StoreRepository()) {
 
     private val _products = MutableStateFlow(StoreUiState())
     val products = _products.asStateFlow()
@@ -47,20 +47,18 @@ internal class Store(private val repository: StoreRepository = StoreRepository()
         return product.values.sumOf { it.product.totalToPay(it.quantity) }
     }
 
-    fun userActions(actions: UserActions) {
+    suspend fun userActions(actions: UserActions) {
         var hasCheckoutError = false
         when (actions) {
-            is AddItem -> {
-                product[actions.code]?.let { item ->
-                    product[actions.code] = item.copy(quantity = item.quantity + 1)
-                }
+            is Retry -> getStoreItems()
+
+            is AddItem -> product[actions.code]?.let { item ->
+                product[actions.code] = item.copy(quantity = item.quantity + 1)
             }
 
-            is RemoveItem -> {
-                product[actions.code]?.let { item ->
-                    if (item.quantity > 0) {
-                        product[actions.code] = item.copy(quantity = item.quantity - 1)
-                    }
+            is RemoveItem -> product[actions.code]?.let { item ->
+                if (item.quantity > 0) {
+                    product[actions.code] = item.copy(quantity = item.quantity - 1)
                 }
             }
 
@@ -102,6 +100,7 @@ internal sealed interface UserActions
 internal data class AddItem(val code: String) : UserActions
 internal data class RemoveItem(val code: String) : UserActions
 internal object Buy : UserActions
+internal object Retry : UserActions
 
 internal data class StoreUiState(
     val isLoading: Boolean = true,

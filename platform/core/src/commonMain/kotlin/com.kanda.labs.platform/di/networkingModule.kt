@@ -7,6 +7,9 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
+import io.ktor.http.ContentType
+import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
+import io.ktor.serialization.kotlinx.json.DefaultJson
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -22,6 +25,10 @@ public fun createHttpClient(
     enableNetworkLogs: Boolean = true
 ): HttpClient = HttpClient(httpClientEngine) {
     install(ContentNegotiation) {
+        register(
+            contentType = ContentType.Text.Plain,
+            converter = KotlinxSerializationConverter(DefaultJson)
+        )
         json()
     }
     defaultRequest {

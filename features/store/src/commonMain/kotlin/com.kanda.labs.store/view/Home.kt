@@ -2,9 +2,11 @@ package com.kanda.labs.store.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +16,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,65 +32,96 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.kanda.labs.design.AppTheme
 import com.kanda.labs.design.component.Button
 import com.kanda.labs.design.component.Card
+import com.kanda.labs.design.component.Error
 import com.kanda.labs.design.component.Text
 import com.kanda.labs.design.tokens.Spacers
 import com.kanda.labs.design.typography.AppTypography
+import kotlinx.coroutines.launch
 
 public object HomeStore : Screen {
     @Composable
     public override fun Content() {
-        val store = remember { Store() }
+        val store = remember { StorePresenter() }
         val uiState by store.products.collectAsState()
+        val scope = rememberCoroutineScope()
+
         LaunchedEffect(Unit) {
             store.getStoreItems()
         }
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            val grid = if (maxWidth > 400.dp) 4 else 2
-            Surface(
-                color = AppTheme.colors.backgroundPrimary,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                if (maxWidth < 400.dp) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        Title()
-                        ListProducts(
-                            modifier = Modifier.weight(1f),
-                            gridItems = grid,
-                            uiState.products,
-                            onAction = { action -> store.userActions(action) }
-                        )
-                        AnimatedVisibility(uiState.products.isNotEmpty()) {
-                            Checkout(
-                                modifier = Modifier.fillMaxWidth().padding(top = Spacers.xSmall),
-                                total = uiState.totalToPay,
-                                errorMessageCheckout = uiState.checkoutErrorMessage,
-                                onClick = { store.userActions(Buy) }
-                            )
-                        }
-                    }
-                } else {
-                    Column {
-                        Title()
-                        Row {
-                            ListProducts(
-                                modifier = Modifier.weight(1f),
-                                gridItems = 3,
-                                uiState.products,
-                                onAction = { action -> store.userActions(action) }
-                            )
-                            AnimatedVisibility(
-                                modifier = Modifier.weight(0.4f),
-                                visible = uiState.products.isNotEmpty()
-                            ) {
-                                Checkout(
-                                    modifier = Modifier.padding(top = Spacers.xSmall),
-                                    total = uiState.totalToPay,
-                                    errorMessageCheckout = uiState.checkoutErrorMessage,
-                                    onClick = { store.userActions(Buy) }
-                                )
-                            }
-                        }
-                    }
+
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxSize().background(AppTheme.colors.backgroundPrimary)
+        ) {
+            when (uiState.hasError) {
+                true -> Error(
+                    modifier = Modifier.fillMaxSize(),
+                    onClick = { scope.launch { store.userActions(Retry) } }
+                )
+
+                else -> ContentScreen(
+                    uiState,
+                    onAction = { scope.launch { store.userActions(it) } }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun Loading() {
+    LinearProgressIndicator(
+        modifier = Modifier.fillMaxWidth(),
+        color = AppTheme.colors.contentPrimary,
+        backgroundColor = AppTheme.colors.contentInversePrimary
+    )
+}
+
+@Composable
+private fun BoxWithConstraintsScope.ContentScreen(
+    uiState: StoreUiState,
+    onAction: (UserActions) -> Unit
+) {
+    val grid = if (maxWidth > 400.dp) 3 else 2
+    if (maxWidth < 400.dp) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Title()
+            AnimatedVisibility(uiState.isLoading) {
+                Loading()
+            }
+            ListProducts(
+                modifier = Modifier.weight(1f),
+                gridItems = grid,
+                uiState.products,
+                onAction = { action -> onAction(action) }
+            )
+            AnimatedVisibility(uiState.products.isNotEmpty()) {
+                Checkout(
+                    modifier = Modifier.fillMaxWidth().padding(top = Spacers.xSmall),
+                    total = uiState.totalToPay,
+                    errorMessageCheckout = uiState.checkoutErrorMessage,
+                    onClick = { onAction(Buy) }
+                )
+            }
+        }
+    } else {
+        Column {
+            Title()
+            Row {
+                ListProducts(
+                    modifier = Modifier.weight(1f),
+                    gridItems = grid,
+                    uiState.products,
+                    onAction = { action -> onAction(action) }
+                )
+                AnimatedVisibility(
+                    modifier = Modifier.weight(0.4f),
+                    visible = uiState.products.isNotEmpty()
+                ) {
+                    Checkout(
+                        total = uiState.totalToPay,
+                        errorMessageCheckout = uiState.checkoutErrorMessage,
+                        onClick = { onAction(Buy) }
+                    )
                 }
             }
         }
@@ -132,7 +166,7 @@ private fun ListProducts(
 
 @Composable
 private fun Checkout(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     total: String,
     errorMessageCheckout: String = "",
     onClick: (() -> Unit)? = null

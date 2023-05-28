@@ -8,9 +8,9 @@ import com.kanda.labs.design.icons.rememberFilterVintage
 import com.kanda.labs.store.domain.ProductItem
 import com.kanda.labs.store.domain.defaultCurrency
 import com.kanda.labs.store.domain.mapToProductItem
-import com.kanda.labs.store.server.StoreService
 import com.kanda.labs.store.server.StoreRepository
 import com.kanda.labs.store.server.StoreResponse
+import com.kanda.labs.store.server.StoreService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -50,6 +50,7 @@ internal class StorePresenter(private val repository: StoreService = StoreReposi
 
     suspend fun userActions(actions: UserActions) {
         var hasCheckoutError = false
+        var hasSuccessBuyingItem = false
         when (actions) {
             is Retry -> getStoreItems()
 
@@ -68,12 +69,17 @@ internal class StorePresenter(private val repository: StoreService = StoreReposi
 
                 if (totalToPay == 0.0) {
                     hasCheckoutError = true
+                    hasSuccessBuyingItem = false
+                } else {
+                    hasCheckoutError = false
+                    hasSuccessBuyingItem = true
                 }
             }
         }
 
         _products.update { state ->
             state.copy(
+                navigateToSuccess = hasSuccessBuyingItem,
                 products = product.values.toList(),
                 totalToPay = "${calculateTotalToPay()}$defaultCurrency",
                 checkoutErrorMessage = if (hasCheckoutError) "Please select at least one item" else ""
@@ -106,6 +112,7 @@ internal object Retry : UserActions
 internal data class StoreUiState(
     val isLoading: Boolean = true,
     val hasError: Boolean = false,
+    val navigateToSuccess: Boolean = false,
     val products: List<StorePresentation> = emptyList(),
     val totalToPay: String = "0$defaultCurrency",
     val checkoutErrorMessage: String = "",

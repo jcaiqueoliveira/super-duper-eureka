@@ -46,11 +46,14 @@ public object HomeStoreScreen : Screen {
         val presenter = remember { StorePresenter() }
         val uiState by presenter.products.collectAsState()
         val scope = rememberCoroutineScope()
+        val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(Unit) {
             presenter.getStoreItems()
         }
-
+        if (uiState.navigateToSuccess) {
+            navigator.push(SuccessScreen)
+        }
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize().background(AppTheme.colors.backgroundPrimary)
         ) {
@@ -83,7 +86,6 @@ private fun BoxWithConstraintsScope.ContentScreen(
     uiState: StoreUiState,
     onAction: (UserActions) -> Unit
 ) {
-    val navigator = LocalNavigator.currentOrThrow
     val grid = if (maxWidth > 400.dp) 3 else 2
     if (maxWidth < 400.dp) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -102,9 +104,7 @@ private fun BoxWithConstraintsScope.ContentScreen(
                     modifier = Modifier.fillMaxWidth().padding(top = Spacers.xSmall),
                     total = uiState.totalToPay,
                     errorMessageCheckout = uiState.checkoutErrorMessage,
-                    onClick = {
-                        navigator.push(SuccessScreen)
-                    }
+                    onClick = { onAction(Buy) }
                 )
             }
         }
@@ -125,9 +125,7 @@ private fun BoxWithConstraintsScope.ContentScreen(
                     Checkout(
                         total = uiState.totalToPay,
                         errorMessageCheckout = uiState.checkoutErrorMessage,
-                        onClick = {
-                            navigator.push(SuccessScreen)
-                        }
+                        onClick = { onAction(Buy) }
                     )
                 }
             }

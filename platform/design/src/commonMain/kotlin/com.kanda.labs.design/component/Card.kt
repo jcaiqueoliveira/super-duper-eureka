@@ -120,10 +120,10 @@ public fun Card(
                         .padding(4.dp)
                         .clip(CircleShape)
                         .background(AppTheme.colors.border)
-                        .padding(Spacers.xSmall)
                         .then(
                             if (secondaryClick != null) Modifier.clickable { secondaryClick() } else Modifier
-                        ),
+                        )
+                        .padding(Spacers.xSmall),
                     imageVector = rememberRemove(),
                     tint = if (AppTheme.colors.isLight) AppTheme.colors.backgroundInversePrimary else AppTheme.colors.contentInversePrimary,
                     contentDescription = null
@@ -134,10 +134,10 @@ public fun Card(
                         .padding(4.dp)
                         .clip(CircleShape)
                         .background(AppTheme.colors.backgroundInversePrimary)
-                        .padding(Spacers.xSmall)
                         .then(
                             if (primaryClick != null) Modifier.clickable { primaryClick() } else Modifier
-                        ),
+                        )
+                        .padding(Spacers.xSmall),
                     imageVector = rememberAdd(),
                     tint = AppTheme.colors.contentInversePrimary,
                     contentDescription = null

@@ -1,5 +1,6 @@
 package com.kanda.labs.store.view
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import com.kanda.labs.design.component.Text
 import com.kanda.labs.design.tokens.Spacers
 import com.kanda.labs.design.typography.AppTypography
 
+
 @Composable
 public fun HomeStore() {
     val store = remember { Store() }
@@ -46,7 +48,7 @@ public fun HomeStore() {
         Column(modifier = Modifier.fillMaxSize()) {
             Text(
                 modifier = Modifier.padding(Spacers.small),
-                text = "Cabify Store",
+                text = "Cabify Store ${uiState.products.size}",
                 typography = AppTypography.Titles.h4,
                 contentColor = AppTheme.colors.contentSecondary
             )
@@ -56,20 +58,25 @@ public fun HomeStore() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(uiState.products) { product ->
+                items(uiState.products) { item ->
                     Card(
-                        icon = product.icon(),
-                        title = product.name,
-                        supportText = product.formattedPrice,
-                        count = product.quantity
+                        icon = item.icon(),
+                        title = item.product.name,
+                        supportText = item.formattedPrice,
+                        count = item.quantity,
+                        primaryClick = { store.userActions(AddItem(item.code)) },
+                        secondaryClick = { store.userActions(RemoveItem(item.code)) }
                     )
                 }
             }
-            Checkout(
-                modifier = Modifier.padding(top = Spacers.xSmall),
-                total = "123",
-                onClick = { }
-            )
+            AnimatedVisibility(uiState.products.isNotEmpty()) {
+                Checkout(
+                    modifier = Modifier.padding(top = Spacers.xSmall),
+                    total = uiState.totalToPay,
+                    errorMessageCheckout = uiState.checkoutErrorMessage,
+                    onClick = { store.userActions(Buy) }
+                )
+            }
         }
     }
 }
@@ -78,6 +85,7 @@ public fun HomeStore() {
 private fun Checkout(
     modifier: Modifier,
     total: String,
+    errorMessageCheckout: String = "",
     onClick: (() -> Unit)? = null
 ) {
     val checkoutShape = RoundedCornerShape(topStart = Spacers.medium, topEnd = Spacers.medium)
@@ -92,7 +100,14 @@ private fun Checkout(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        AnimatedVisibility(errorMessageCheckout.isNotEmpty()) {
+            Text(
+                modifier = Modifier.padding(Spacers.xSmall),
+                text = errorMessageCheckout,
+                contentColor = AppTheme.colors.warning,
+                typography = AppTypography.Titles.h7
+            )
+        }
         Row(
             modifier = Modifier.fillMaxWidth().padding(Spacers.small),
             verticalAlignment = Alignment.CenterVertically

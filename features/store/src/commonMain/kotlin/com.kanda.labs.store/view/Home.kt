@@ -47,40 +47,85 @@ public object HomeStore : Screen {
                 color = AppTheme.colors.backgroundPrimary,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Text(
-                        modifier = Modifier.padding(Spacers.small),
-                        text = "Cabify Store",
-                        typography = AppTypography.Titles.h4,
-                        contentColor = AppTheme.colors.contentSecondary
-                    )
-                    LazyVerticalGrid(
-                        modifier = Modifier.weight(1f).padding(horizontal = Spacers.small),
-                        columns = GridCells.Fixed(grid),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(uiState.products) { item ->
-                            Card(
-                                icon = item.icon(),
-                                title = item.product.name,
-                                supportText = item.formattedPrice,
-                                count = item.quantity,
-                                primaryClick = { store.userActions(AddItem(item.code)) },
-                                secondaryClick = { store.userActions(RemoveItem(item.code)) }
+                if (maxWidth < 400.dp) {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Title()
+                        ListProducts(
+                            modifier = Modifier.weight(1f),
+                            gridItems = grid,
+                            uiState.products,
+                            onAction = { action -> store.userActions(action) }
+                        )
+                        AnimatedVisibility(uiState.products.isNotEmpty()) {
+                            Checkout(
+                                modifier = Modifier.fillMaxWidth().padding(top = Spacers.xSmall),
+                                total = uiState.totalToPay,
+                                errorMessageCheckout = uiState.checkoutErrorMessage,
+                                onClick = { store.userActions(Buy) }
                             )
                         }
                     }
-                    AnimatedVisibility(uiState.products.isNotEmpty()) {
-                        Checkout(
-                            modifier = Modifier.padding(top = Spacers.xSmall),
-                            total = uiState.totalToPay,
-                            errorMessageCheckout = uiState.checkoutErrorMessage,
-                            onClick = { store.userActions(Buy) }
-                        )
+                } else {
+                    Column {
+                        Title()
+                        Row {
+                            ListProducts(
+                                modifier = Modifier.weight(1f),
+                                gridItems = 3,
+                                uiState.products,
+                                onAction = { action -> store.userActions(action) }
+                            )
+                            AnimatedVisibility(
+                                modifier = Modifier.weight(0.4f),
+                                visible = uiState.products.isNotEmpty()
+                            ) {
+                                Checkout(
+                                    modifier = Modifier.padding(top = Spacers.xSmall),
+                                    total = uiState.totalToPay,
+                                    errorMessageCheckout = uiState.checkoutErrorMessage,
+                                    onClick = { store.userActions(Buy) }
+                                )
+                            }
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun Title() {
+    Text(
+        modifier = Modifier.padding(Spacers.small),
+        text = "Cabify Store",
+        typography = AppTypography.Titles.h4,
+        contentColor = AppTheme.colors.contentSecondary
+    )
+}
+
+@Composable
+private fun ListProducts(
+    modifier: Modifier,
+    gridItems: Int,
+    products: List<StorePresentation>,
+    onAction: (UserActions) -> Unit
+) {
+    LazyVerticalGrid(
+        modifier = modifier.padding(horizontal = Spacers.small),
+        columns = GridCells.Fixed(gridItems),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(products) { item ->
+            Card(
+                icon = item.icon(),
+                title = item.product.name,
+                supportText = item.formattedPrice,
+                count = item.quantity,
+                primaryClick = { onAction(AddItem(item.code)) },
+                secondaryClick = { onAction(RemoveItem(item.code)) }
+            )
         }
     }
 }
@@ -99,8 +144,7 @@ private fun Checkout(
             .border(
                 border = BorderStroke(1.dp, color = AppTheme.colors.border),
                 shape = checkoutShape
-            )
-            .fillMaxWidth(),
+            ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -95,14 +95,12 @@ public class StorePresenterTest {
                 presenter.userActions(AddItem("TSHIRT"))
                 presenter.userActions(AddItem("MUG"))
 
-                repeat(3) {
-                    awaitItem()
-                }
+                repeat(3) { awaitItem() }
 
                 val item = awaitItem()
 
                 assertTrue(
-                    message = "",
+                    message = "acceptance criteria for single item",
                     actual = item.totalToPay.contains("32.5")
                 )
             }
@@ -125,14 +123,12 @@ public class StorePresenterTest {
                 presenter.userActions(AddItem("VOUCHER"))
                 presenter.userActions(AddItem("TSHIRT"))
 
-                repeat(5) {
-                    awaitItem()
-                }
+                repeat(5) { awaitItem() }
 
                 val item = awaitItem()
 
                 assertTrue(
-                    message = "",
+                    message = "check acceptance criteria for multiples tshirt",
                     actual = item.totalToPay.contains("81.0")
                 )
             }
@@ -157,14 +153,12 @@ public class StorePresenterTest {
                 presenter.userActions(AddItem("TSHIRT"))
                 presenter.userActions(AddItem("TSHIRT"))
 
-                repeat(7) {
-                    awaitItem()
-                }
+                repeat(7) { awaitItem() }
 
                 val item = awaitItem()
 
                 assertTrue(
-                    message = "",
+                    message = "check acceptance criteria for multiples voucher",
                     actual = item.totalToPay.contains("74.5")
                 )
             }

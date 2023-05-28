@@ -7,9 +7,15 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 
 
-internal class StoreRepository(private val client: HttpClient = createHttpClient()) {
+public interface StoreService {
+    public suspend fun getStoreItems(): List<StoreResponse>
+}
 
-    public suspend fun getStoreItems(): List<StoreResponse> {
+internal class StoreRepository(
+    private val client: HttpClient = createHttpClient()
+) : StoreService {
+
+    public override suspend fun getStoreItems(): List<StoreResponse> {
         val responsePlainText = client.get(PRODUCT).body<StoreResponseRaw>()
         return responsePlainText.products
     }

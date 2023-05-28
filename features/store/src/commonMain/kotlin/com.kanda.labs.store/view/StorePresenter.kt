@@ -8,13 +8,14 @@ import com.kanda.labs.design.icons.rememberFilterVintage
 import com.kanda.labs.store.domain.ProductItem
 import com.kanda.labs.store.domain.defaultCurrency
 import com.kanda.labs.store.domain.mapToProductItem
+import com.kanda.labs.store.server.StoreService
 import com.kanda.labs.store.server.StoreRepository
 import com.kanda.labs.store.server.StoreResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-internal class StorePresenter(private val repository: StoreRepository = StoreRepository()) {
+internal class StorePresenter(private val repository: StoreService = StoreRepository()) {
 
     private val _products = MutableStateFlow(StoreUiState())
     val products = _products.asStateFlow()

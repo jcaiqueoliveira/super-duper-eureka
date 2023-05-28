@@ -25,6 +25,6 @@ public fun Text(
         style = typography.style.copy(color = contentColor, textAlign = textAlign),
         overflow = TextOverflow.Ellipsis,
         maxLines = maxLines,
-        minLines = 1
+        minLines = minLines
     )
 }

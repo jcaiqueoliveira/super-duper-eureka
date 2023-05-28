@@ -48,13 +48,13 @@ public fun HomeStore() {
         Column(modifier = Modifier.fillMaxSize()) {
             Text(
                 modifier = Modifier.padding(Spacers.small),
-                text = "Cabify Store ${uiState.products.size}",
+                text = "Cabify Store",
                 typography = AppTypography.Titles.h4,
                 contentColor = AppTheme.colors.contentSecondary
             )
             LazyVerticalGrid(
                 modifier = Modifier.weight(1f).padding(horizontal = Spacers.small),
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Fixed(getGridItem()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -105,7 +105,7 @@ private fun Checkout(
                 modifier = Modifier.padding(Spacers.xSmall),
                 text = errorMessageCheckout,
                 contentColor = AppTheme.colors.warning,
-                typography = AppTypography.Titles.h7
+                typography = AppTypography.Titles.h6
             )
         }
         Row(

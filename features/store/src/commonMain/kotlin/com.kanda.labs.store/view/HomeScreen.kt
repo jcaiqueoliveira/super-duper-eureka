@@ -21,14 +21,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.kanda.labs.design.AppTheme
@@ -41,19 +43,22 @@ import com.kanda.labs.design.typography.AppTypography
 import kotlinx.coroutines.launch
 
 public object HomeStoreScreen : Screen {
+
+    override val key: ScreenKey = uniqueScreenKey
+
     @Composable
     public override fun Content() {
-        val presenter = remember { StorePresenter() }
+        val presenter = rememberScreenModel { StorePresenter() }
         val uiState by presenter.products.collectAsState()
         val scope = rememberCoroutineScope()
         val navigator = LocalNavigator.currentOrThrow
 
-        LaunchedEffect(Unit) {
-            presenter.getStoreItems()
+        LaunchedEffect(uiState.isLoading) {
+            if (uiState.isLoading) {
+                presenter.getStoreItems()
+            }
         }
-        if (uiState.navigateToSuccess) {
-            navigator.push(SuccessScreen)
-        }
+
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize().background(AppTheme.colors.backgroundPrimary)
         ) {
@@ -65,7 +70,15 @@ public object HomeStoreScreen : Screen {
 
                 else -> ContentScreen(
                     uiState,
-                    onAction = { scope.launch { presenter.userActions(it) } }
+                    onAction = {
+                        scope.launch {
+                            if (it == Buy && uiState.canGoToSuccess) {
+                                navigator.push(SuccessScreen)
+                            } else {
+                                presenter.userActions(it)
+                            }
+                        }
+                    }
                 )
             }
         }

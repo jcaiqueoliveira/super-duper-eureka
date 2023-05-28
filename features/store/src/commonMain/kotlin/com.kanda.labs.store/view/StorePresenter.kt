@@ -2,6 +2,7 @@ package com.kanda.labs.store.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import cafe.adriel.voyager.core.model.ScreenModel
 import com.kanda.labs.design.icons.rememberCoffee
 import com.kanda.labs.design.icons.rememberConfirmationNumber
 import com.kanda.labs.design.icons.rememberFilterVintage
@@ -15,7 +16,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-internal class StorePresenter(private val repository: StoreService = StoreRepository()) {
+internal class StorePresenter(
+    private val repository: StoreService = StoreRepository()
+) : ScreenModel {
 
     private val _products = MutableStateFlow(StoreUiState())
     val products = _products.asStateFlow()
@@ -50,7 +53,7 @@ internal class StorePresenter(private val repository: StoreService = StoreReposi
 
     suspend fun userActions(actions: UserActions) {
         var hasCheckoutError = false
-        var hasSuccessBuyingItem = false
+
         when (actions) {
             is Retry -> getStoreItems()
 
@@ -66,20 +69,15 @@ internal class StorePresenter(private val repository: StoreService = StoreReposi
 
             is Buy -> {
                 val totalToPay = calculateTotalToPay()
-
                 if (totalToPay == 0.0) {
                     hasCheckoutError = true
-                    hasSuccessBuyingItem = false
-                } else {
-                    hasCheckoutError = false
-                    hasSuccessBuyingItem = true
                 }
             }
         }
 
         _products.update { state ->
             state.copy(
-                navigateToSuccess = hasSuccessBuyingItem,
+                canGoToSuccess = calculateTotalToPay() > 0.0,
                 products = product.values.toList(),
                 totalToPay = "${calculateTotalToPay()}$defaultCurrency",
                 checkoutErrorMessage = if (hasCheckoutError) "Please select at least one item" else ""
@@ -112,7 +110,7 @@ internal object Retry : UserActions
 internal data class StoreUiState(
     val isLoading: Boolean = true,
     val hasError: Boolean = false,
-    val navigateToSuccess: Boolean = false,
+    val canGoToSuccess: Boolean = false,
     val products: List<StorePresentation> = emptyList(),
     val totalToPay: String = "0$defaultCurrency",
     val checkoutErrorMessage: String = "",

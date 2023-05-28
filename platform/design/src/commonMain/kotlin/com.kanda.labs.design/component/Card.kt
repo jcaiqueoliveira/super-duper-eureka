@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.kanda.labs.design.AppTheme
 import com.kanda.labs.design.icons.rememberAdd
 import com.kanda.labs.design.icons.rememberRemove
-import com.kanda.labs.design.tokens.AppColor
 import com.kanda.labs.design.tokens.AppRoundedCorner
 import com.kanda.labs.design.tokens.Spacers
 import com.kanda.labs.design.typography.AppTypography
@@ -66,7 +65,7 @@ public fun Card(
                     text = count.toString(),
                     typography = AppTypography.Text.small,
                     textAlign = TextAlign.Center,
-                    contentColor = AppTheme.colors.contentInversePrimary
+                    contentColor = AppTheme.colors.contentInversePrimary,
                 )
             }
         }
@@ -75,19 +74,19 @@ public fun Card(
         ) {
             Icon(
                 modifier = Modifier
-                    .padding(top = Spacers.small)
+                    .padding(top = Spacers.xSmall)
                     .size(56.dp)
                     .clip(CircleShape)
                     .background(Color.White)
                     .padding(8.dp),
                 imageVector = icon,
                 contentDescription = null,
-                tint = if(AppTheme.colors.isLight) AppTheme.colors.backgroundInversePrimary else AppTheme.colors.backgroundPrimary
+                tint = if (AppTheme.colors.isLight) AppTheme.colors.backgroundInversePrimary else AppTheme.colors.backgroundPrimary
             )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = Spacers.medium),
+                    .padding(top = Spacers.small),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -96,7 +95,8 @@ public fun Card(
                     textAlign = TextAlign.Start,
                     typography = AppTypography.Titles.h7,
                     contentColor = AppTheme.colors.contentSecondary,
-                    maxLines = 2
+                    maxLines = 2,
+                    minLines = 2
                 )
                 Text(
                     modifier = Modifier.weight(0.6f),
@@ -110,7 +110,7 @@ public fun Card(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = Spacers.medium),
+                    .padding(top = Spacers.small),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -125,7 +125,7 @@ public fun Card(
                             if (secondaryClick != null) Modifier.clickable { secondaryClick() } else Modifier
                         ),
                     imageVector = rememberRemove(),
-                    tint = if(AppTheme.colors.isLight) AppTheme.colors.backgroundInversePrimary else AppTheme.colors.contentInversePrimary,
+                    tint = if (AppTheme.colors.isLight) AppTheme.colors.backgroundInversePrimary else AppTheme.colors.contentInversePrimary,
                     contentDescription = null
                 )
                 Icon(

@@ -11,6 +11,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":platform:design"))
+                implementation(project(":platform:core"))
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)

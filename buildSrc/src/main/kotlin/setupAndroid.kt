@@ -111,7 +111,7 @@ fun Project.setupKMP() {
 private fun KotlinJvmOptions.configureKotlinJvmOptions() {
     jvmTarget = JavaVersion.VERSION_1_8.toString()
 
-    freeCompilerArgs += "-Xexplicit-api=strict"
+    freeCompilerArgs += listOf("-Xexplicit-api=strict", "-Xcontext-receivers")
 }
 
 private fun Project.findAndroidExtension(): BaseExtension =

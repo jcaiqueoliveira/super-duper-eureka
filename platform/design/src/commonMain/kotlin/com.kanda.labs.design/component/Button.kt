@@ -8,17 +8,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kanda.labs.design.AppTheme
+import com.kanda.labs.design.tokens.AppShapes
 import com.kanda.labs.design.typography.AppTypography
 
 @Composable
-public fun Button(text: String, onClick: (() -> Unit)? = null) {
+public fun Button(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: (() -> Unit)? = null
+) {
     Box(
-        Modifier
+        modifier
             .fillMaxWidth()
+            .clip(AppShapes.medium)
             .background(AppTheme.colors.backgroundInversePrimary)
             .height(default.height)
             .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier),

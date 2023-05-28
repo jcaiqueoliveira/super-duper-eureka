@@ -17,12 +17,14 @@ public fun Text(
     textAlign: TextAlign? = null,
     contentColor: Color = AppTheme.colors.contentPrimary,
     maxLines: Int = Int.MAX_VALUE,
+    minLines: Int = 1,
 ) {
     BasicText(
         text = text,
         modifier = modifier,
         style = typography.style.copy(color = contentColor, textAlign = textAlign),
         overflow = TextOverflow.Ellipsis,
-        maxLines = maxLines
+        maxLines = maxLines,
+        minLines = 1
     )
 }

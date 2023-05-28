@@ -6,6 +6,7 @@ import com.kanda.labs.design.icons.rememberCoffee
 import com.kanda.labs.design.icons.rememberConfirmationNumber
 import com.kanda.labs.design.icons.rememberFilterVintage
 import com.kanda.labs.store.domain.ProductItem
+import com.kanda.labs.store.domain.defaultCurrency
 import com.kanda.labs.store.domain.mapToProductItem
 import com.kanda.labs.store.server.StoreRepository
 import com.kanda.labs.store.server.StoreResponse
@@ -75,7 +76,7 @@ internal class Store(private val repository: StoreRepository = StoreRepository()
         _products.update { state ->
             state.copy(
                 products = product.values.toList(),
-                totalToPay = "${calculateTotalToPay()}€",
+                totalToPay = "${calculateTotalToPay()}$defaultCurrency",
                 checkoutErrorMessage = if (hasCheckoutError) "Please select at least one item" else ""
             )
         }
@@ -90,7 +91,7 @@ internal class Store(private val repository: StoreRepository = StoreRepository()
                     name = product.name
                 ),
                 code = product.code,
-                formattedPrice = "${product.price}€",
+                formattedPrice = "${product.price}$defaultCurrency",
                 quantity = 0
             )
         }
@@ -106,8 +107,8 @@ internal data class StoreUiState(
     val isLoading: Boolean = true,
     val hasError: Boolean = false,
     val products: List<StorePresentation> = emptyList(),
-    val totalToPay: String = "0",
-    val checkoutErrorMessage: String = ""
+    val totalToPay: String = "0$defaultCurrency",
+    val checkoutErrorMessage: String = "",
 )
 
 internal data class StorePresentation(

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
 import com.kanda.labs.design.AppTheme
 import com.kanda.labs.design.component.Button
 import com.kanda.labs.design.component.Card
@@ -31,51 +33,53 @@ import com.kanda.labs.design.component.Text
 import com.kanda.labs.design.tokens.Spacers
 import com.kanda.labs.design.typography.AppTypography
 
-
-@Composable
-public fun HomeStore() {
-    val store = remember { Store() }
-    val uiState by store.products.collectAsState()
-
-    LaunchedEffect(Unit) {
-        store.getStoreItems()
-    }
-
-    Surface(
-        color = AppTheme.colors.backgroundPrimary,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Text(
-                modifier = Modifier.padding(Spacers.small),
-                text = "Cabify Store",
-                typography = AppTypography.Titles.h4,
-                contentColor = AppTheme.colors.contentSecondary
-            )
-            LazyVerticalGrid(
-                modifier = Modifier.weight(1f).padding(horizontal = Spacers.small),
-                columns = GridCells.Fixed(getGridItem()),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+public object HomeStore : Screen {
+    @Composable
+    public override fun Content() {
+        val store = remember { Store() }
+        val uiState by store.products.collectAsState()
+        LaunchedEffect(Unit) {
+            store.getStoreItems()
+        }
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val grid = if (maxWidth > 400.dp) 4 else 2
+            Surface(
+                color = AppTheme.colors.backgroundPrimary,
+                modifier = Modifier.fillMaxSize()
             ) {
-                items(uiState.products) { item ->
-                    Card(
-                        icon = item.icon(),
-                        title = item.product.name,
-                        supportText = item.formattedPrice,
-                        count = item.quantity,
-                        primaryClick = { store.userActions(AddItem(item.code)) },
-                        secondaryClick = { store.userActions(RemoveItem(item.code)) }
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        modifier = Modifier.padding(Spacers.small),
+                        text = "Cabify Store",
+                        typography = AppTypography.Titles.h4,
+                        contentColor = AppTheme.colors.contentSecondary
                     )
+                    LazyVerticalGrid(
+                        modifier = Modifier.weight(1f).padding(horizontal = Spacers.small),
+                        columns = GridCells.Fixed(grid),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(uiState.products) { item ->
+                            Card(
+                                icon = item.icon(),
+                                title = item.product.name,
+                                supportText = item.formattedPrice,
+                                count = item.quantity,
+                                primaryClick = { store.userActions(AddItem(item.code)) },
+                                secondaryClick = { store.userActions(RemoveItem(item.code)) }
+                            )
+                        }
+                    }
+                    AnimatedVisibility(uiState.products.isNotEmpty()) {
+                        Checkout(
+                            modifier = Modifier.padding(top = Spacers.xSmall),
+                            total = uiState.totalToPay,
+                            errorMessageCheckout = uiState.checkoutErrorMessage,
+                            onClick = { store.userActions(Buy) }
+                        )
+                    }
                 }
-            }
-            AnimatedVisibility(uiState.products.isNotEmpty()) {
-                Checkout(
-                    modifier = Modifier.padding(top = Spacers.xSmall),
-                    total = uiState.totalToPay,
-                    errorMessageCheckout = uiState.checkoutErrorMessage,
-                    onClick = { store.userActions(Buy) }
-                )
             }
         }
     }

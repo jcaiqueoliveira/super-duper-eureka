@@ -29,6 +29,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.kanda.labs.design.AppTheme
 import com.kanda.labs.design.component.Button
 import com.kanda.labs.design.component.Card
@@ -38,15 +40,15 @@ import com.kanda.labs.design.tokens.Spacers
 import com.kanda.labs.design.typography.AppTypography
 import kotlinx.coroutines.launch
 
-public object HomeStore : Screen {
+public object HomeStoreScreen : Screen {
     @Composable
     public override fun Content() {
-        val store = remember { StorePresenter() }
-        val uiState by store.products.collectAsState()
+        val presenter = remember { StorePresenter() }
+        val uiState by presenter.products.collectAsState()
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(Unit) {
-            store.getStoreItems()
+            presenter.getStoreItems()
         }
 
         BoxWithConstraints(
@@ -55,12 +57,12 @@ public object HomeStore : Screen {
             when (uiState.hasError) {
                 true -> Error(
                     modifier = Modifier.fillMaxSize(),
-                    onClick = { scope.launch { store.userActions(Retry) } }
+                    onClick = { scope.launch { presenter.userActions(Retry) } }
                 )
 
                 else -> ContentScreen(
                     uiState,
-                    onAction = { scope.launch { store.userActions(it) } }
+                    onAction = { scope.launch { presenter.userActions(it) } }
                 )
             }
         }
@@ -81,6 +83,7 @@ private fun BoxWithConstraintsScope.ContentScreen(
     uiState: StoreUiState,
     onAction: (UserActions) -> Unit
 ) {
+    val navigator = LocalNavigator.currentOrThrow
     val grid = if (maxWidth > 400.dp) 3 else 2
     if (maxWidth < 400.dp) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -99,7 +102,9 @@ private fun BoxWithConstraintsScope.ContentScreen(
                     modifier = Modifier.fillMaxWidth().padding(top = Spacers.xSmall),
                     total = uiState.totalToPay,
                     errorMessageCheckout = uiState.checkoutErrorMessage,
-                    onClick = { onAction(Buy) }
+                    onClick = {
+                        navigator.push(SuccessScreen)
+                    }
                 )
             }
         }
@@ -120,7 +125,9 @@ private fun BoxWithConstraintsScope.ContentScreen(
                     Checkout(
                         total = uiState.totalToPay,
                         errorMessageCheckout = uiState.checkoutErrorMessage,
-                        onClick = { onAction(Buy) }
+                        onClick = {
+                            navigator.push(SuccessScreen)
+                        }
                     )
                 }
             }

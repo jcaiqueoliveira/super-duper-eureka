@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -29,12 +30,14 @@ public fun Button(
     text: String,
     onClick: (() -> Unit)? = null,
     isLoading: Boolean = false,
+    background: Color = AppTheme.colors.backgroundInversePrimary,
+    contentColor: Color = AppTheme.colors.contentInversePrimary
 ) {
     Box(
         modifier
             .fillMaxWidth()
             .clip(AppShapes.medium)
-            .background(AppTheme.colors.backgroundInversePrimary)
+            .background(background)
             .height(default.height)
             .then(if (onClick != null && !isLoading) Modifier.clickable { onClick() } else Modifier),
         contentAlignment = Alignment.Center
@@ -56,7 +59,7 @@ public fun Button(
                 typography = default.typography,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
-                contentColor = AppTheme.colors.contentInversePrimary
+                contentColor = contentColor
             )
         }
     }

@@ -13,9 +13,6 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
-                implementation(libs.composeImageLoader)
-                implementation(libs.composeIcons.featherIcons)
-                implementation(libs.multiplatformSettings)
             }
         }
 

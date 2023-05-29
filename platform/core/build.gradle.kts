@@ -12,9 +12,6 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.bundles.networking)
                 implementation(libs.kotlinx.serialization.json)
-                implementation(libs.kotlinx.datetime)
-                implementation(libs.multiplatformSettings)
-                implementation(libs.koin.core)
             }
         }
 

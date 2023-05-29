@@ -1,5 +1,5 @@
 ## Setup
- - check your system with (KDoctor)[https://github.com/Kotlin/kdoctor]
+ - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
  - install JDK 11 on your machine
  - install Android Studio
  - install Kotlin Multiplatform plugin on your android studio
@@ -31,7 +31,7 @@ Set a *JAVA_HOME* environment variable
 
 ### Code organization
 
-[![Imagem 1](docs/chart.png)](docs/chart.png)
+[![Imagem 1](docs/chart.png)](docs/chart.png | width=200)
 
 ## Running Apps
 
@@ -52,8 +52,9 @@ If you have some problem with the first build with KMM plugin, please try with X
 Run the browser application: `./gradlew :applications:webApp:jsBrowserDevelopmentRun`
 
 ### Resources
-| Home                                                                    | Home - Dark                                                           | Rotated                                                                       | Success                                                                                   |
-|-------------------------------------------------------------------------|-----------------------------------------------------------------------|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
-| [![Imagem 1](docs/home-light-android.png)](docs/home-light-android.png) | [![Imagem 1](docs/home-dark-android.png)](docs/home-dark-android.png) | [![Imagem 1](docs/home-dark-android.png)](docs/home-light-rotate-android.png) | [![Imagem 1](docs/success-screen-ligh-android.png)](docs/success-screen-ligh-android.png) |
-| [![Imagem 4](docs/home-light-ios.png)](docs/home-light-ios.png)         | [![Imagem 1](docs/home-dark-ios.png)](docs/home-dark-ios.png)         | [![Imagem 6](caminho/para/imagem6.jpg)](caminho/para/imagem6.jpg)             | [![Imagem 1](docs/success-screen-light-ios.png)](docs/success-screen-light-ios.png)       |
-| [![Imagem 7](docs/home-light-web.png)](docs/home-light-web.png)         | x                                                                     | x                                                                             | [![Imagem 1](docs/success-screen-light-web.png)](docs/success-screen-light-web.png)       |
+| Android                                                                                   | IOS                                                                              | Web                                                                                 |
+|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| [![Imagem 1](docs/home-light-android.png)](docs/home-light-android.png)                   | [![Imagem 1](docs/home-light-ios.png)](docs/home-light-ios.png)                  | [![Imagem 1](docs/home-light-web.png)](docs/home-light-web.png)                     | 
+| [![Imagem 4](docs/home-dark-android.png)](docs/home-dark-android.png)                     | [![Imagem 1](docs/home-dark-ios.png)](docs/home-dark-ios.png)                    | [![Imagem 6](docs/success-screen-light-web.png)](docs/success-screen-light-web.png) |
+| [![Imagem 1](docs/home-light-rotate-android.png)](docs/home-light-rotate-android.png)     | [![Imagem 1](docs/home-light-rotate-ios.png)](docs/home-light-rotate-ios.png)    | x                                                                                   | 
+| [![Imagem 1](docs/success-screen-ligh-android.png)](docs/success-screen-ligh-android.png) | [![Imagem 1](docs/home-light-rotate-ios.png)](docs/success-screen-light-ios.png) | x                                                                                   |

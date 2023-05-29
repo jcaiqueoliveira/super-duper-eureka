@@ -16,17 +16,7 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
-                implementation(libs.libres)
                 implementation(libs.voyager.navigator)
-                implementation(libs.composeImageLoader)
-                implementation(libs.napier)
-                implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.ktor.core)
-                implementation(libs.composeIcons.featherIcons)
-                implementation(libs.kotlinx.serialization.json)
-                implementation(libs.kotlinx.datetime)
-                implementation(libs.multiplatformSettings)
-                implementation(libs.koin.core)
             }
         }
 

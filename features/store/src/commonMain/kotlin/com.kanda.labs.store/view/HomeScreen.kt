@@ -42,7 +42,7 @@ import com.kanda.labs.design.tokens.Spacers
 import com.kanda.labs.design.typography.AppTypography
 import kotlinx.coroutines.launch
 
-public object HomeStoreScreen : Screen {
+public object StoreScreen : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
 

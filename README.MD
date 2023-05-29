@@ -22,6 +22,27 @@ Set a *JAVA_HOME* environment variable
 
 `export JAVA_HOME=$(/usr/libexec/java_home -v 11)`
 
+## Decisions
+
+### Discounts
+Since each kind of product can have its own discount rule. Every item should implement this rule on its own
+Take a look into StoreCheckoutRules there there are all products currently supported
+
+### DI
+No DI framework added but all dependencies added through constructors 
+
+### Presenter
+Presenter has some inspiration on [Molecule](https://github.com/cashapp/molecule) presenter sample
+
+### Improvements
+- Add previews on android folder
+Previews for compose is not available on commonMain yet, as improvement here add previews on android folder would be good.
+- Map product types as Enum instead of Strings
+Since the number of products are small its ok for while to keep as strings, but it can create misconfiguration passing strings for instance, on tests.
+
+### Tests
+Fakes to replace real request, avoiding mocks and testing all parts as much as possible.
+
 ## Architectural stuffs
 
 ### Stack
@@ -79,4 +100,5 @@ Run the browser application: `./gradlew :applications:webApp:jsBrowserDevelopmen
 ### Colors
 
 Colors from [Cabify brand](https://brand.cabify.com/#color-intro)
+
 Icons from [Composable icons](https://www.composables.com/icons)

@@ -31,7 +31,7 @@ Set a *JAVA_HOME* environment variable
 
 ### Code organization
 
-[![Imagem 1](docs/chart.png)](docs/chart.png | width=200)
+[![Imagem 1](docs/chart.png | width=200)]
 
 ## Running Apps
 

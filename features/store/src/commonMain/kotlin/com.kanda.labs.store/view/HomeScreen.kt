@@ -150,7 +150,7 @@ private fun BoxWithConstraintsScope.ContentScreen(
 private fun Title() {
     Text(
         modifier = Modifier.padding(Spacers.small),
-        text = "Cabify Store",
+        text = "Store",
         typography = AppTypography.Titles.h4,
         contentColor = AppTheme.colors.contentSecondary
     )
